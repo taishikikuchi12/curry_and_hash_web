@@ -98,16 +98,15 @@
     /* スマホ用調整 */
     @media (max-width: 600px) {
         body {
-            align-items: flex-start;
-            justify-content: flex-start;
-            padding-top: 0px;
-            height: auto;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
         .container {
             margin-top: 0;
             width: 90%;
-            padding: 0px;
+            padding: 20px;
         }
 
         h1 {
@@ -143,7 +142,7 @@
 <button onclick="document.getElementById('file').click()" class="upload-btn">📷 撮影 / 選択</button>
 <button onclick="openGallery()" class="secondary">📁 アルバムから選択</button>
 
-<img id="preview" src="" alt="" style="display:none;">
+<img id="preview" src="" alt="" style="display:none; margin-top:10px;">
 
 <button onclick="upload()">判定する</button>
 
@@ -165,8 +164,21 @@
             const preview = document.getElementById("preview");
 
             if (file) {
+                preview.remove();
                 preview.src = URL.createObjectURL(file);
                 preview.style.display = "block";
+
+                // ボタンの位置に移動
+                const button = document.querySelector("button[onclick='upload()']");
+                button.parentNode.insertBefore(preview, button);
+
+                // 一番下までスクロール
+                setTimeout(() => {
+                    window.scrollTo({
+                        top: document.body.scrollHeight,
+                        behavior: "smooth"
+                    });
+                }, 100);
             }
 
             // 次回はカメラに戻す
