@@ -162,6 +162,7 @@
             const input = document.getElementById("file");
             const file = input.files[0];
             const preview = document.getElementById("preview");
+            const container = document.querySelector(".container");
 
             if (file) {
                 preview.remove();
@@ -172,13 +173,14 @@
                 const button = document.querySelector("button[onclick='upload()']");
                 button.parentNode.insertBefore(preview, button);
 
-                // 一番下までスクロール
+                // AI判定の見出しが見切れない位置までスクロール
                 setTimeout(() => {
+                    const top = container.getBoundingClientRect().top + window.scrollY - 16;
                     window.scrollTo({
-                        top: document.body.scrollHeight,
+                        top,
                         behavior: "smooth"
                     });
-                }, 100);
+                }, 150);
             }
 
             // 次回はカメラに戻す
