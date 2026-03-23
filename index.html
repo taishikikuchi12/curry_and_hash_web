@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI判定アプリ</title>
     <style>
     body {
@@ -77,6 +78,26 @@
 
     .upload-btn:hover {
         background: #28a745;
+    }
+    /* スマホ用調整 */
+    @media (max-width: 600px) {
+        .container {
+            width: 90%;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 26px;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 16px;
+        }
+
+        #result {
+            font-size: 20px;
+        }
     }
     </style>
     
