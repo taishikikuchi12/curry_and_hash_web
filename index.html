@@ -79,10 +79,33 @@
     .upload-btn:hover {
         background: #28a745;
     }
+    /* ローディングスピナー */
+    .spinner {
+        display: none;
+        margin: 15px auto;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #e5e5ea;
+        border-top: 4px solid #007aff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
     /* スマホ用調整 */
     @media (max-width: 600px) {
+        body {
+            align-items: flex-start;
+            padding-top: 40px;
+            height: auto;
+        }
+
         .container {
-            width: 90%;
+            margin-top: 20px;
+            width: 80%;
             padding: 40px;
         }
 
@@ -92,7 +115,7 @@
 
         button {
             font-size: 18px;
-            padding: 16px;
+            padding: 5px;
         }
 
         #result {
@@ -121,6 +144,7 @@
 
 <button onclick="upload()">判定する</button>
 
+<div id="loading" class="spinner"></div>
 <div id="result"></div>
 
 </div>
@@ -148,6 +172,8 @@
 
         async function upload() {
             const file = document.getElementById("file").files[0];
+            const loading = document.getElementById("loading");
+            const result = document.getElementById("result");
 
             if (!file) {
                 alert("画像を選択してください");
@@ -157,15 +183,29 @@
             const formData = new FormData();
             formData.append("file", file);
 
-            const res = await fetch("https://curryandhashai-production.up.railway.app/predict", {
-                method: "POST",
-                body: formData
-            });
+            loading.style.display = "block";
+            result.innerText = "";
 
-            const data = await res.json();
+            try {
+                const res = await fetch("https://curryandhashai-production.up.railway.app/predict", {
+                    method: "POST",
+                    body: formData
+                });
 
-            document.getElementById("result").innerText =
-                `結果: ${data.prediction}（信頼度: ${(data.confidence * 100).toFixed(1)}%）`;
+                if (!res.ok) {
+                    throw new Error(`HTTP ${res.status}`);
+                }
+
+                const data = await res.json();
+
+                result.innerText =
+                    `結果: ${data.prediction}（信頼度: ${(data.confidence * 100).toFixed(1)}%）`;
+            } catch (error) {
+                result.innerText = "エラーが発生しました";
+                console.error(error);
+            } finally {
+                loading.style.display = "none";
+            }
         }
     </script>
 
