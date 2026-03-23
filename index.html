@@ -208,6 +208,14 @@
             loading.style.display = "block";
             result.innerText = "";
 
+            // ローディング表示時に下へスクロール
+            setTimeout(() => {
+                loading.scrollIntoView({
+                    behavior: "smooth",
+                    block: "end"
+                });
+            }, 100);
+
             try {
                 const res = await fetch("https://curryandhashai-production.up.railway.app/predict", {
                     method: "POST",
