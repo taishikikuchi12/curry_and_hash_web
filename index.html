@@ -196,7 +196,6 @@
             const file = document.getElementById("file").files[0];
             const loading = document.getElementById("loading");
             const result = document.getElementById("result");
-            const container = document.querySelector(".container");
 
             if (!file) {
                 alert("画像を選択してください");
@@ -225,12 +224,11 @@
                     `結果: ${data.prediction}（信頼度: ${(data.confidence * 100).toFixed(1)}%）`;
 
                 setTimeout(() => {
-                    const top = container.getBoundingClientRect().top + window.scrollY - 12;
-                    window.scrollTo({
-                        top,
-                        behavior: "smooth"
+                    result.scrollIntoView({
+                        behavior: "smooth",
+                        block: "end"
                     });
-                }, 100);
+                }, 150);
             } catch (error) {
                 result.innerText = "エラーが発生しました";
                 console.error(error);
