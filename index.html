@@ -13,7 +13,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        min-height: 100vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 20px 0;
+        box-sizing: border-box;
     }
 
     .container {
@@ -98,9 +102,11 @@
     /* スマホ用調整 */
     @media (max-width: 600px) {
         body {
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            align-items: flex-start;
+            justify-content: flex-start;
+            min-height: 100vh;
+            overflow-y: auto;
+            padding: 12px 0 24px;
         }
 
         .container {
@@ -163,6 +169,7 @@
             const file = input.files[0];
             const preview = document.getElementById("preview");
             const container = document.querySelector(".container");
+            const uploadButton = document.querySelector("button[onclick='upload()']");
 
             if (file) {
                 preview.remove();
@@ -170,17 +177,15 @@
                 preview.style.display = "block";
 
                 // ボタンの位置に移動
-                const button = document.querySelector("button[onclick='upload()']");
-                button.parentNode.insertBefore(preview, button);
+                uploadButton.parentNode.insertBefore(preview, uploadButton);
 
-                // AI判定の見出しが見切れない位置までスクロール
+                // 画像追加後に下の判定エリアがしっかり見える位置までスクロール
                 setTimeout(() => {
-                    const top = container.getBoundingClientRect().top + window.scrollY - 16;
-                    window.scrollTo({
-                        top,
-                        behavior: "smooth"
+                    uploadButton.scrollIntoView({
+                        behavior: "smooth",
+                        block: "end"
                     });
-                }, 150);
+                }, 200);
             }
 
             // 次回はカメラに戻す
@@ -191,6 +196,7 @@
             const file = document.getElementById("file").files[0];
             const loading = document.getElementById("loading");
             const result = document.getElementById("result");
+            const container = document.querySelector(".container");
 
             if (!file) {
                 alert("画像を選択してください");
@@ -217,6 +223,14 @@
 
                 result.innerText =
                     `結果: ${data.prediction}（信頼度: ${(data.confidence * 100).toFixed(1)}%）`;
+
+                setTimeout(() => {
+                    const top = container.getBoundingClientRect().top + window.scrollY - 12;
+                    window.scrollTo({
+                        top,
+                        behavior: "smooth"
+                    });
+                }, 100);
             } catch (error) {
                 result.innerText = "エラーが発生しました";
                 console.error(error);
